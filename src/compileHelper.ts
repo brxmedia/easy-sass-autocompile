@@ -43,6 +43,7 @@ export class compileHelper {
 
     async onSave(document: vscode.TextDocument) {
         let main = fileHelper.instance.mainFile(document);
+        vscode.window.setStatusBarMessage('Sass Autocompile: Building...', 10000);
 
         main.then(main => {
             this.compile(main);
@@ -84,11 +85,12 @@ export class compileHelper {
             if (SourceMap) {
                 fs.writeFileSync(_outFile + ".map", result.map, 'utf-8');
             }
+            vscode.window.setStatusBarMessage('Sass Autocompile: Done', 10000);
 
 
         } catch (error) {
             vscode.window.showErrorMessage('Autocompile - Could not compile SASS. ' + _file + ' Check Outputs for more information.');
-            vscode.window.setStatusBarMessage('Autocompile: Error', 10000);
+            vscode.window.setStatusBarMessage('Sass Autocompile: Error', 10000);
             console.log(error.formatted);
 
             return false;
