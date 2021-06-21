@@ -23,10 +23,10 @@
 		"configuration":{
 			"title": "Easy Sass Autocompile",
 			"properties": {
-				"easySassAutocompile.sassLocation":{
+				"easySassAutocompile.sassBinLocation":{
 					"type": "string",
 					"default": "",
-					"description": "Location of your SASS Installation"
+					"description": "Location of your SASS Binary Installation"
 				},
 				"easySassAutocompile.sourceMap":{
 					"type": "boolean",
