@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
+import { sep } from 'path';
 
 var lineReader = require('line-reader');
 
@@ -12,21 +13,21 @@ export interface ITargetPaths {
     min: string
 }
 
-export class fileHelper{
+export class fileHelper {
     public static get instance() {
         return new fileHelper();
     }
 
-    isSassOrScss(document: vscode.TextDocument){
-        if(document.fileName.toLowerCase().endsWith('.scss') || document.fileName.toLowerCase().endsWith('.sass')){
+    isSassOrScss(document: vscode.TextDocument) {
+        if (document.fileName.toLowerCase().endsWith('.scss') || document.fileName.toLowerCase().endsWith('.sass')) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
 
-    mainFile(document: vscode.TextDocument){
+    mainFile(document: vscode.TextDocument) {
         return new Promise<string>((resolve) => {
             let mainFile = document.fileName;
 
@@ -34,27 +35,30 @@ export class fileHelper{
                 resolve(mainFile);
             };
 
-            lineReader.eachLine(document.fileName, function(line: string) {  
-                if(line.indexOf('//') != 0) {
+            lineReader.eachLine(document.fileName, function (line: string) {
+                if (line.indexOf('//') != 0) {
                     res();
                     return false;
                 }
 
-                if(line.indexOf('main') > -1) {
+                if (line.indexOf('main') > -1) {
                     let data = (/\/\/\s*main\:\s*([\.\/\w]+)/g).exec(line);
-                    if(data != null && data.length > 1) {
-                        let filePath = path.join(document.fileName.substring(0, document.fileName.lastIndexOf('\\')), data[1]);
-                        // console.log(filePath);
-                        if(fs.existsSync(filePath)) {
+                    if (data != null && data.length > 1) {
+                        let seperator = '/';
+                        if (document.fileName.includes('\\')) {
+                            seperator = '\\';
+                        }
+                        let filePath = path.join(document.fileName.substring(0, document.fileName.lastIndexOf(seperator)), data[1]);
+                        if (fs.existsSync(filePath)) {
                             mainFile = filePath;
                         }
                     }
                 }
             });
         });
-        
+
     }
-    
+
     targetPaths(main: string) {
         return new Promise<ITargetPaths>((resolve) => {
             let config = vscode.workspace.getConfiguration('easy-sass-autocompile');
@@ -62,6 +66,8 @@ export class fileHelper{
             let tPath = path.dirname(main);
             let tTarget = path.basename(main);
             let oPath = tPath;
+            let oTarget = tTarget.substr(0, tTarget.length - 4) + 'css';
+            let oMinTarget = tTarget.substr(0, tTarget.length - 4) + 'min..css';
 
             if (config.subFolder != undefined && config.subFolder.length > 0) {
                 oPath = path.join(tPath, config.subFolder);
@@ -70,13 +76,13 @@ export class fileHelper{
                 targetPath: tPath,
                 target: tTarget,
                 path: oPath,
-                css: "test.css",
-                min: "test.min.css"
+                css: oTarget,
+                min: oMinTarget
             });
         });
     }
 
-    writeFile(FilePath:string, Data:string){
+    writeFile(FilePath: string, Data: string) {
         fs.writeFileSync(FilePath, Data, 'utf-8');
     }
 }
