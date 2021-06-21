@@ -6,27 +6,39 @@ import { SourceMap } from 'module';
 
 
 export class compileHelper {
-    // private SassCompiler = require('/usr/local/lib/node_modules/sass/sass.dart.js');
-    private SassCompiler = require('C:\\Users\\PBorn\\AppData\\Roaming\\npm\\node_modules\\sass\\sass.dart.js');
+    private sassBin:string = "";
+    private SassCompiler:any = null;
 
     public static get instance() {
         let config = vscode.workspace.getConfiguration('easySassAutocompile');
-        let sassPath = config.get('sassPath') as string;
-        let instance = new compileHelper();
+        let sassBinLocation = config.get('sassBinLocation') as string;
 
-        if (sassPath != undefined && sassPath.length > 1) {
-            instance.setSassCompiler(sassPath);
+        let sassBin = '/usr/local/lib/node_modules/sass/sass.dart.js';
+        // let sassBin = 'C:\\Users\\PBorn\\AppData\\Roaming\\npm\\node_modules\\sass\\sass.dart.js';
+
+        if (sassBinLocation != undefined && sassBinLocation.length > 1) {
+            sassBin = sassBinLocation;
         }
+        console.log(sassBin);
+
+        let instance = new compileHelper();
+        instance.setSassBin(sassBin);
+        instance.setSassCompiler(sassBin);
 
         return instance;
     }
 
     info() {
+        console.log(this.sassBin);
         console.log(this.SassCompiler.info);
     }
 
-    setSassCompiler(sassPath: string) {
-        this.SassCompiler = require(sassPath);
+    setSassCompiler(sassBin: string) {
+        this.SassCompiler = require(sassBin);
+    }
+
+    setSassBin(sassBin: string){
+        this.sassBin = sassBin;
     }
 
     async onSave(document: vscode.TextDocument) {
@@ -35,20 +47,6 @@ export class compileHelper {
         main.then(main => {
             this.compile(main);
         });
-
-        // let tempfilePath = '/Volumes/Development/liquify.foundation/css/liquify.scss';
-        // let tempOutputPath = '/Volumes/Development/liquify.foundation/css/liquify.css'
-        // let tempOutputPathMap = '/Volumes/Development/liquify.foundation/css/liquify.css.map'
-
-        // console.log(SassCompiler.info);
-        // var result = SassCompiler.renderSync({
-        // 	file: tempfilePath,
-        // 	sourceMap: true,
-        // 	outFile: tempOutputPath
-        // });
-
-        // fs.writeFileSync(tempOutputPath, result.css, 'utf-8');
-        // fs.writeFileSync(tempOutputPathMap, result.map, 'utf-8');
     }
 
     compile(main: string) {
@@ -70,9 +68,6 @@ export class compileHelper {
 
                 this.compileCss(targetPath, sourceMap, outputMinPath, "compressed");
             }
-
-            // console.log(sourceMap);
-            // console.log(minify);
         });
     }
 
