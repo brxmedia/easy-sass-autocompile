@@ -85,4 +85,8 @@ export class fileHelper {
     writeFile(FilePath: string, Data: string) {
         fs.writeFileSync(FilePath, Data, 'utf-8');
     }
+
+    fileExists(FilePath: string){
+        return fs.existsSync(FilePath);
+    }
 }
