@@ -4,7 +4,7 @@ import { statusBarUi } from './satusBarUi';
 export class helper {
     private static _msgChannel: vscode.OutputChannel;
     private static _prefix: string = "Sass Autocompile - ";
-    private static _msgCache: string[];
+    private static _msgCache: string[] = [];
 
     private static get prefix() {
         return helper._prefix;
