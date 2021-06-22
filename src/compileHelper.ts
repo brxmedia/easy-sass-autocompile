@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileHelper } from './fileHelper';
-import { SourceMap } from 'module';
+import {helper} from './helper';
 
 
 export class compileHelper {
@@ -19,13 +19,17 @@ export class compileHelper {
         if (sassBinLocation != undefined && sassBinLocation.length > 1) {
             sassBin = sassBinLocation;
         }
-        console.log(sassBin);
 
-        let instance = new compileHelper();
-        instance.setSassBin(sassBin);
-        instance.setSassCompiler(sassBin);
+        if(fileHelper.instance.fileExists(sassBin)){
+            let instance = new compileHelper();
+            instance.setSassBin(sassBin);
+            instance.setSassCompiler(sassBin);
 
-        return instance;
+            return instance;
+        }
+
+        helper.systemMessage('Path to Sass Binary does not exist. ' + sassBin + '', 'error');
+        return null;
     }
 
     info() {
@@ -43,7 +47,7 @@ export class compileHelper {
 
     async onSave(document: vscode.TextDocument) {
         let main = fileHelper.instance.mainFile(document);
-        vscode.window.setStatusBarMessage('Sass Autocompile: Building...', 10000);
+        helper.systemMessage("Building...", 'status');
 
         main.then(main => {
             this.compile(main);
@@ -82,15 +86,14 @@ export class compileHelper {
             });
 
             fs.writeFileSync(_outFile, result.css, 'utf-8');
-            if (SourceMap) {
+            if (_sourceMap) {
                 fs.writeFileSync(_outFile + ".map", result.map, 'utf-8');
             }
-            vscode.window.setStatusBarMessage('Sass Autocompile: Done', 10000);
+            helper.systemMessage('Done', 'status');
 
 
         } catch (error) {
-            vscode.window.showErrorMessage('Autocompile - Could not compile SASS. ' + _file + ' Check Outputs for more information.');
-            vscode.window.setStatusBarMessage('Sass Autocompile: Error', 10000);
+            helper.systemMessage('Autocompile - Could not compile SASS. ' + _file + ' Check Outputs for more information.', 'error');
             console.log(error.formatted);
 
             return false;
