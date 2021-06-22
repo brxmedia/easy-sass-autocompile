@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import * as path from 'path';
 import { fileHelper } from './fileHelper';
 import { helper } from './helper';
@@ -66,19 +65,25 @@ export class compileHelper {
 
             let sourceMap = config.get('sourceMap') as boolean;
             let minify = config.get('minify') as boolean;
+            let subFolder = config.get('subFolder') as string;
 
-            let targetPath = path.join(paths.targetPath, paths.target);
-            let outputPath = path.join(paths.path, paths.css);
+            let tTargetPath = paths.targetPath;
+            if (subFolder.length > 0) {
+                tTargetPath = path.join(paths.targetPath, subFolder);
+            }
+
+            let targetPath = path.join(paths.path, paths.target);
+            let outputPath = path.join(tTargetPath, paths.css);
 
             let compiled = this.compileCss(targetPath, sourceMap, outputPath);
-            if(compiled){
+            if (compiled) {
                 if (minify) {
-                    let outputMinPath = path.join(paths.path, paths.min);
-    
+                    let outputMinPath = path.join(tTargetPath, paths.min);
+
                     this.compileCss(targetPath, sourceMap, outputMinPath, "compressed");
                 }
-    
-                helper.outputMessage('Successfully compiled',[]);
+
+                helper.outputMessage('Successfully compiled', []);
                 helper.statusBarUi.success();
             }
         });
@@ -93,13 +98,15 @@ export class compileHelper {
                 outputStyle: _outputStyle
             });
 
-            fs.writeFileSync(_outFile, result.css, 'utf-8');
-            helper.cacheMessage('Successfully compiled: ' + _outFile);
-            if (_sourceMap) {
-                fs.writeFileSync(_outFile + ".map", result.map, 'utf-8');
-                helper.cacheMessage('Successfully compiled: ' + _outFile);
-            }
 
+            let generated = fileHelper.instance.writeFile(_outFile, result.css);
+            if (generated) {
+                if (_sourceMap) {
+                    fileHelper.instance.writeFile(_outFile + ".map", result.map);
+                }
+                return true;
+            }
+            return false;
 
         } catch (error) {
             helper.systemMessage('Could not compile SASS. ' + _file + ' Check Outputs for more information.', 'error');
@@ -109,7 +116,5 @@ export class compileHelper {
 
             return false;
         }
-
-        return true;
     }
 }
