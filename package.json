@@ -2,6 +2,9 @@
 	"name": "easy-sass-autocompile",
 	"displayName": "Easy Sass Autocompile",
 	"publisher": "brxmedia",
+	"repository": {
+		"url": "https://github.com/brxmedia/easy-sass-autocompile"
+	},
 	"description": "",
 	"version": "0.5.1",
 	"engines": {
