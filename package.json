@@ -1,13 +1,13 @@
 {
 	"name": "easy-sass-autocompile",
 	"displayName": "Easy Sass Autocompile",
-	"description": "",
+	"description": "Automatically compile your Sass files on save. Supports main files and dart-sass.",
 	"publisher": "brxmedia",
 	"repository": {
 		"url": "https://github.com/brxmedia/easy-sass-autocompile"
 	},
 	"icon": "icon.jpg",
-	"version": "0.5.2",
+	"version": "0.5.3",
 	"engines": {
 		"vscode": "^1.57.0"
 	},
