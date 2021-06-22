@@ -7,7 +7,7 @@
 		"url": "https://github.com/brxmedia/easy-sass-autocompile"
 	},
 	"icon": "icon.jpg",
-	"version": "0.5.1",
+	"version": "0.5.2",
 	"engines": {
 		"vscode": "^1.57.0"
 	},
