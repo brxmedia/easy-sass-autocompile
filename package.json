@@ -2,7 +2,7 @@
 	"name": "easy-sass-autocompile",
 	"displayName": "Easy Sass Autocompile",
 	"description": "",
-	"version": "0.0.1",
+	"version": "0.5.1",
 	"engines": {
 		"vscode": "^1.57.0"
 	},
@@ -26,22 +26,22 @@
 				"easySassAutocompile.sassBinLocation":{
 					"type": "string",
 					"default": "",
-					"description": "Location of your SASS Binary Installation"
+					"markdownDescription": "Insert the location of your Sass binary. The default location the extension will check  `/usr/local/lib/node_modules/sass/sass.dart.js`. This is the default path of dart sass mac installation."
 				},
 				"easySassAutocompile.sourceMap":{
 					"type": "boolean",
 					"default": true,
-					"description": "Generate CSS Source Map"
+					"markdownDescription": "Automatically generate CSS source map link in `.css` and `.css.map` file."
 				},
 				"easySassAutocompile.minify":{
 					"type": "boolean",
 					"default": true,
-					"markdownDescription": "Minify generated CSS in a seperate `.min.css` file"
+					"markdownDescription": "Automatically minifies the generated CSS in an additional `.min.css` file. Also compatible with source maps. All files will be generated in addition to the `.css` files."
 				},
 				"easySassAutocompile.subFolder":{
 					"type": "string",
 					"default": "",
-					"markdownDescription": "If you want to store your generated css files in a subfolder like `/dist`, enter just this."
+					"markdownDescription": "If you want to store your generated css files in a subfolder like `/dist`, it is also possible to use a relative filepath to maybe go to a higher folder level such as `../dist` or just go to the parent folder `../`."
 				}
 			}
 		}
