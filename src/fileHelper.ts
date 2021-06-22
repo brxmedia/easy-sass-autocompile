@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { sep } from 'path';
+import { helper } from './helper';
 
 var lineReader = require('line-reader');
 
@@ -67,7 +67,7 @@ export class fileHelper {
             let tTarget = path.basename(main);
             let oPath = tPath;
             let oTarget = tTarget.substr(0, tTarget.length - 4) + 'css';
-            let oMinTarget = tTarget.substr(0, tTarget.length - 4) + 'min..css';
+            let oMinTarget = tTarget.substr(0, tTarget.length - 4) + 'min.css';
 
             if (config.subFolder != undefined && config.subFolder.length > 0) {
                 oPath = path.join(tPath, config.subFolder);
@@ -83,7 +83,17 @@ export class fileHelper {
     }
 
     writeFile(FilePath: string, Data: string) {
-        fs.writeFileSync(FilePath, Data, 'utf-8');
+        try {
+            fs.writeFileSync(FilePath, Data, 'utf-8');
+            helper.cacheMessage('Successfully compiled: ' + FilePath.toString());
+            
+            return true;
+        } catch (error) {
+            helper.cacheMessage('Compiler Error: ' + FilePath.toString());
+            helper.cacheMessage(' - ' + error.toString());
+            
+            return false;
+        }
     }
 
     fileExists(FilePath: string){
