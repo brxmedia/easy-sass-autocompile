@@ -9,7 +9,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// The command has been defined in the package.json file
 	let disposable = vscode.commands.registerCommand('easy-sass-autocompile.info', () => {
-		compileHelper.instance.info();
+		if (compileHelper.instance != null)
+			compileHelper.instance.info();
 	});
 
 	// The command has been defined in the package.json file
@@ -20,9 +21,11 @@ export function activate(context: vscode.ExtensionContext) {
 		if (activeEditor) {
 			let document = activeEditor.document;
 			if (document) {
-				// check if the document is of typ sass or scss
-				if (fileHelper.instance.isSassOrScss(document)) {
-					compileHelper.instance.onSave(document);
+				if (compileHelper.instance != null) {
+					// check if the document is of typ sass or scss
+					if (fileHelper.instance.isSassOrScss(document)) {
+						compileHelper.instance.onSave(document);
+					}
 				}
 			}
 		}
@@ -35,4 +38,4 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
