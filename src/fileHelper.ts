@@ -83,20 +83,26 @@ export class fileHelper {
     }
 
     writeFile(FilePath: string, Data: string) {
-        try {
-            fs.writeFileSync(FilePath, Data, 'utf-8');
+        let result = (FilePath: string, err: NodeJS.ErrnoException | null) => {
+            if (err != null){
+                helper.cacheMessage('Compiler Error: ' + FilePath.toString());
+                helper.cacheMessage(' - ' + err.toString());
+                return false;
+            }
+                
+        }
+
+        fs.writeFile(FilePath, Data, 'utf-8', (err) => {
+            result(FilePath, err);
+        });
+
+        if (this.fileExists(FilePath)) {
             helper.cacheMessage('Successfully compiled: ' + FilePath.toString());
-            
             return true;
-        } catch (error) {
-            helper.cacheMessage('Compiler Error: ' + FilePath.toString());
-            helper.cacheMessage(' - ' + error.toString());
-            
-            return false;
         }
     }
 
-    fileExists(FilePath: string){
+    fileExists(FilePath: string) {
         return fs.existsSync(FilePath);
     }
 }

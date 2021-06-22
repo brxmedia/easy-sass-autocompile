@@ -86,6 +86,10 @@ export class compileHelper {
                 helper.outputMessage('Successfully compiled', []);
                 helper.statusBarUi.success();
             }
+            else{
+                helper.outputMessage('Error compiling', [], true, true);
+                helper.statusBarUi.error();
+            }
         });
     }
 
