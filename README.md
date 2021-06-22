@@ -8,7 +8,7 @@ Describe specific features of your extension including screenshots of your exten
 
 For example if there is an image subfolder under your extension project workspace:
 
-![feature X](https://github.com/brxmedia/easy-sass-autocompile/blob/master/example.png)
+![feature X](./example.png)
 
 ## Requirements
 
