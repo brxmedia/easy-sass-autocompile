@@ -12,6 +12,10 @@ export interface ITargetPaths {
     css: string,
     min: string
 }
+export interface IWriteFile {
+    FilePath: string,
+    err: NodeJS.ErrnoException | null
+}
 
 export class fileHelper {
     public static get instance() {
@@ -83,23 +87,14 @@ export class fileHelper {
     }
 
     writeFile(FilePath: string, Data: string) {
-        let result = (FilePath: string, err: NodeJS.ErrnoException | null) => {
-            if (err != null){
-                helper.cacheMessage('Compiler Error: ' + FilePath.toString());
-                helper.cacheMessage(' - ' + err.toString());
-                return false;
-            }
-                
-        }
-
-        fs.writeFile(FilePath, Data, 'utf-8', (err) => {
-            result(FilePath, err);
+        return new Promise<IWriteFile>((resolve) => {
+            fs.writeFile(FilePath, Data, 'utf-8', (err) => {
+                resolve({
+                    FilePath: FilePath, 
+                    err: err
+                });
+            });
         });
-
-        if (this.fileExists(FilePath)) {
-            helper.cacheMessage('Successfully compiled: ' + FilePath.toString());
-            return true;
-        }
     }
 
     fileExists(FilePath: string) {
