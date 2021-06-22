@@ -2,12 +2,12 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileHelper } from './fileHelper';
-import {helper} from './helper';
+import { helper } from './helper';
 
 
 export class compileHelper {
-    private sassBin:string = "";
-    private SassCompiler:any = null;
+    private sassBin: string = "";
+    private SassCompiler: any = null;
 
     public static get instance() {
         let config = vscode.workspace.getConfiguration('easySassAutocompile');
@@ -20,34 +20,38 @@ export class compileHelper {
             sassBin = sassBinLocation;
         }
 
-        if(fileHelper.instance.fileExists(sassBin)){
+        if (fileHelper.instance.fileExists(sassBin)) {
             let instance = new compileHelper();
             instance.setSassBin(sassBin);
             instance.setSassCompiler(sassBin);
+            helper.statusBarUi.init();
 
             return instance;
         }
 
         helper.systemMessage('Path to Sass Binary does not exist. ' + sassBin + '', 'error');
+        helper.statusBarUi.error();
         return null;
     }
 
-    info() {
-        console.log(this.sassBin);
-        console.log(this.SassCompiler.info);
+    get info() {
+        return {
+            sassBin: this.sassBin,
+            sassInfo: this.SassCompiler.info
+        }
     }
 
     setSassCompiler(sassBin: string) {
         this.SassCompiler = require(sassBin);
     }
 
-    setSassBin(sassBin: string){
+    setSassBin(sassBin: string) {
         this.sassBin = sassBin;
     }
 
     async onSave(document: vscode.TextDocument) {
         let main = fileHelper.instance.mainFile(document);
-        helper.systemMessage("Building...", 'status');
+        helper.statusBarUi.building();
 
         main.then(main => {
             this.compile(main);
@@ -67,11 +71,15 @@ export class compileHelper {
             let outputPath = path.join(paths.path, paths.css);
 
             let compiled = this.compileCss(targetPath, sourceMap, outputPath);
-
-            if (minify && compiled) {
-                let outputMinPath = path.join(paths.path, paths.min);
-
-                this.compileCss(targetPath, sourceMap, outputMinPath, "compressed");
+            if(compiled){
+                if (minify) {
+                    let outputMinPath = path.join(paths.path, paths.min);
+    
+                    this.compileCss(targetPath, sourceMap, outputMinPath, "compressed");
+                }
+    
+                helper.outputMessage('Successfully compiled',[]);
+                helper.statusBarUi.success();
             }
         });
     }
@@ -86,15 +94,18 @@ export class compileHelper {
             });
 
             fs.writeFileSync(_outFile, result.css, 'utf-8');
+            helper.cacheMessage('Successfully compiled: ' + _outFile);
             if (_sourceMap) {
                 fs.writeFileSync(_outFile + ".map", result.map, 'utf-8');
+                helper.cacheMessage('Successfully compiled: ' + _outFile);
             }
-            helper.systemMessage('Done', 'status');
 
 
         } catch (error) {
-            helper.systemMessage('Autocompile - Could not compile SASS. ' + _file + ' Check Outputs for more information.', 'error');
-            console.log(error.formatted);
+            helper.systemMessage('Could not compile SASS. ' + _file + ' Check Outputs for more information.', 'error');
+            helper.statusBarUi.error();
+
+            helper.outputMessage('Sass Error', ['Sass syntax error at line ' + error.line + ', column ' + error.column, error.file], true);
 
             return false;
         }
