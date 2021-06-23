@@ -60,3 +60,35 @@ The `main:` inline option will prevent your current file from be compiled and co
 
 ## Sass Installation
 
+Now to the most important part of the installation. Make sure you install the right version and know the location of your intallation. Here I will cover the most cases I am aware of.
+
+> Please read all the Sass installation instruction to get the best installation for your case. This information came from [https://sass-lang.com/install](https://sass-lang.com/install)
+
+### Install Anywhere (Standalone)
+
+You can install Sass on Windows, Mac, or Linux by downloading the package for your operating system from [GitHub](https://github.com/sass/dart-sass/releases/tag/1.35.1) and adding it to your [PATH](https://katiek2.github.io/path-doc/). That’s all—there are no external dependencies and nothing else you need to install.
+
+### Install Anywhere (npm)
+
+If you use Node.js, you can also install Sass using npm by running
+
+```
+npm install -g sass
+```
+
+**However, please note** that this will install the pure JavaScript implementation of Sass, which runs somewhat slower than the other options listed here. But it has the same interface, so it’ll be easy to swap in another implementation later if you need a bit more speed!
+
+### Install on Windows (Chocolatey)
+If you use the Chocolatey package manager for Windows, you can install Dart Sass by running
+
+```
+choco install sass
+```
+
+### Install on Mac OS X or Linux (Homebrew)
+If you use the Homebrew package manager for Mac OS X or Linux, you can install Dart Sass by running
+
+```
+brew install sass/sass/sass
+```
+
