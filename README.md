@@ -47,5 +47,16 @@ The following settings are available in the extension settings.
  
     If you want to store your generated css files in a subfolder like `/dist`, it is also possible to use a relative filepath to maybe go to a higher folder level such as `../dist` or just go to the parent folder `../`.
 
+## Inline Options
+
+Currently the is only one inline option and that was the most important for me. Inline commands has to be in Line 1 of your file to be parsed correctly.
+
+```css
+//main: location/to/your/main/file.scss
+```
+The `main:` inline option will prevent your current file from be compiled and compile the main file instead.
+
+> Other inline option will follow in the future, as i know some I want to implement just jet. If you have some wishes feal free to contact me.
+
 ## Sass Installation
 
