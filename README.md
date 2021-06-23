@@ -34,10 +34,18 @@ The use of this extension is as simple as it seams. Just save your `.sass` or `.
 
 ## Settings
 The following settings are available in the extension settings.
- - `easySassAutoCompiler.sassBinLocation : string`: Insert the location of your Sass binary. The default location the extension will check  `/usr/local/lib/node_modules/sass/sass.dart.js`. This is the default path of dart sass mac installation.
- - `easySassAutoCompiler.soureMap : boolean`: Automatically generate CSS source map link in `.css` and `.css.map` file.
- - `easySassAutoCompiler.soureMap : boolean`: Automatically minifies the generated CSS in an additional `.min.css` file. Also compatible with source maps. All files will be generated in addition to the `.css` files.
- - `easySassAutoCompiler.subFolder : string`: If you want to store your generated css files in a subfolder like `/dist`, it is also possible to use a relative filepath to maybe go to a higher folder level such as `../dist` or just go to the parent folder `../`.
+ - `easySassAutoCompiler.sassBinLocation : string`
+
+    Insert the location of your Sass binary. The default location the extension will check  `/usr/local/lib/node_modules/sass/sass.dart.js`. This is the default path of dart sass mac installation.
+ - `easySassAutoCompiler.soureMap : boolean`
+
+    Automatically generate CSS source map link in `.css` and `.css.map` file.
+ - `easySassAutoCompiler.soureMap : boolean`
+ 
+    Automatically minifies the generated CSS in an additional `.min.css` file. Also compatible with source maps. All files will be generated in addition to the `.css` files.
+ - `easySassAutoCompiler.subFolder : string`
+ 
+    If you want to store your generated css files in a subfolder like `/dist`, it is also possible to use a relative filepath to maybe go to a higher folder level such as `../dist` or just go to the parent folder `../`.
 
 ## Sass Installation
 
