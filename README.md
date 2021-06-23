@@ -51,7 +51,7 @@ The following settings are available in the extension settings.
 
 Currently the is only one inline option and that was the most important for me. Inline commands has to be in Line 1 of your file to be parsed correctly.
 
-```css
+```scss
 //main: location/to/your/main/file.scss
 ```
 The `main:` inline option will prevent your current file from be compiled and compile the main file instead.
