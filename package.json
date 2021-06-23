@@ -1,7 +1,7 @@
 {
 	"name": "easy-sass-autocompile",
 	"displayName": "Easy Sass Autocompile",
-	"description": "Automatically compile your Sass files on save. Supports main files and dart-sass.",
+	"description": "Automatically compile your .sass and .scss fles on save. This extension supports sass and dart-sass and shipped with some inline features.",
 	"publisher": "brxmedia",
 	"repository": {
 		"url": "https://github.com/brxmedia/easy-sass-autocompile"
