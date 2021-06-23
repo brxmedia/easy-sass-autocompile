@@ -16,7 +16,7 @@ The following verions off Sass are supported:
  - Dart Sass
  - Note Sass <sub><sup>*(Version 3.0.0 or higher)*</sup></sub>
 
- For more information about Sass installation, check out the Installation section
+ For more information about Sass installation, check out the [Sass Installation](#sass-installation) section
 
 
 ## Installation
@@ -25,5 +25,9 @@ Install through Visual Studio Code Extensions by searching for `brxmedia easy-sa
 
 You can also install the extension by passing the following command to the VSC Quick Navigation. Press `CTRL+P` and enter 
 
-```brxmedia.easy-sass-autocompile```
+```
+ext install brxmedia.easy-sass-autocompile
+```
+
+### Sass Installation
 
