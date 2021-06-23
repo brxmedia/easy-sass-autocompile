@@ -7,10 +7,24 @@
 		"url": "https://github.com/brxmedia/easy-sass-autocompile"
 	},
 	"icon": "icon.jpg",
-	"version": "0.5.4",
+	"version": "0.5.5",
 	"engines": {
 		"vscode": "^1.57.0"
 	},
+    "keywords": [
+        "SASS",
+        "SCSS",
+        "Compiler",
+        "Transpiler",
+        "SASS Compiler",
+		"SCSS Compiler",
+		"Autocompile",
+		"SASS Autocompile",
+		"SCSS Autocompile",
+		"Autocompiler",
+		"SASS Autocompiler",
+		"SCSS Autocompiler"
+    ],
 	"categories": [
 		"Other"
 	],
