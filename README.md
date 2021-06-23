@@ -92,3 +92,6 @@ If you use the Homebrew package manager for Mac OS X or Linux, you can install D
 brew install sass/sass/sass
 ```
 
+After you installed the right Sass version for you case, make sure you get the path to your `sass.js` or `sass-dart.js`. *Node: these names can change depenting on your installation. The extention can only use the Javascript installations of Sass.*
+
+**Enjoy!**
