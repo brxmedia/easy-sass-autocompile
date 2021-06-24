@@ -6,7 +6,7 @@ export class statusBarUi {
 
     private static get statusBarItem() {
         if (!statusBarUi._statusBarItem) {
-            statusBarUi._statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 200);
+            statusBarUi._statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 500);
             this.statusBarItem.show();
         }
 
