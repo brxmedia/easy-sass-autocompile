@@ -89,76 +89,73 @@ export class compileHelper {
     }
 
     async compile(targetPaths: ITargetPaths, sourceMap: boolean, minify: boolean) {
-
         let targetPath = esac.file.join(targetPaths.targetPath, targetPaths.target);
         let outputPath = esac.file.join(targetPaths.path, targetPaths.css);
 
-        this.compileCss(targetPath, sourceMap, outputPath);
-        console.log('start compiling');
+        this.compileCss(targetPath, sourceMap, outputPath).then((result) => {
+            if(result){
+                if(minify){
+                    outputPath = esac.file.join(targetPaths.path, targetPaths.min);
+
+                    this.compileCss(targetPath, sourceMap, outputPath, 'compressed').then((result) => {
+                        if(result){
+                            esac.message.outputMessage('Successfully compiled', []);
+                            esac.satusBar.success();
+                        }
+                    });
+                }
+                else{
+                    esac.message.outputMessage('Successfully compiled', []);
+                    esac.satusBar.success();
+                }
+            }
+        });
     }
 
     compileCss(_file: string, _sourceMap: boolean, _outFile: string, _outputStyle: string = "expanded") {
-        return new Promise<string | boolean>((resolve) => {
+        return new Promise<boolean>((resolve) => {
             try {
-                let result = this.SassCompiler.renderSync({
+                let sassResult = this.SassCompiler.renderSync({
                     file: _file,
                     sourceMap: _sourceMap,
                     outFile: _outFile,
                     outputStyle: _outputStyle
                 });
 
-                console.log(result.css.toString());
+                esac.file.writeFile(_outFile, sassResult.css).then((result) => {
+                    let prompt = (result: NodeJS.ErrnoException) => {
 
-                // let file = fileHelper.instance.writeFile(_outFile, result.css);
+                        esac.message.systemMessage('Could not save file. ' + _file + ' Check Outputs for more information.', 'error');
+                        esac.satusBar.error();
 
-                // file.then(file => {
-                //     if (file.err != null) {
-                //         // helper.cacheMessage('Compiler Error: ' + file.FilePath.toString());
-                //         // helper.cacheMessage(' - ' + file.err.toString());
-                //         resolve({
-                //             err: true,
-                //             compileErr: false
-                //         });
-                //     }
-                //     else {
-                //         // helper.cacheMessage('Successfully compiled: ' + file.FilePath.toString());
+                        esac.message.outputMessage('File writing error', [result.toString()], true);
+                        resolve(false);
+                    };
 
-                //         if (_sourceMap) {
-                //             esac.file.writeFile(_outFile + ".map", result.map).then(result => {
-                //                 if (fileMap.err != null) {
-                //                     // helper.cacheMessage('Compiler Error: ' + fileMap.FilePath.toString());
-                //                     // helper.cacheMessage(' - ' + fileMap.err.toString());
-                //                     resolve({
-                //                         err: true,
-                //                         compileErr: false
-                //                     });
-                //                 }
-                //                 else {
-                //                     // helper.cacheMessage('Successfully compiled: ' + fileMap.FilePath.toString());
-                //                     resolve({
-                //                         err: false,
-                //                         compileErr: false
-                //                     });
-                //                 }
-                //             });
-                //         }
-                //         resolve({
-                //             err: false,
-                //             compileErr: false
-                //         });
-                //     }
-                // });
-
+                    if (typeof result == 'string') {
+                        esac.message.cacheMessage('Successfully compiled: ' + _outFile);
+                        if (_sourceMap) {
+                            esac.file.writeFile(_outFile + '.map', sassResult.map).then((result) => {
+                                if (typeof result == 'string') {
+                                    esac.message.cacheMessage('Successfully compiled: ' + _outFile + '.map');
+                                    resolve(true);
+                                }
+                                else {
+                                    prompt(result);
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        prompt(result);
+                    }
+                });
             } catch (error) {
-                // helper.systemMessage('Could not compile SASS. ' + _file + ' Check Outputs for more information.', 'error');
-                // helper.statusBarUi.error();
+                esac.message.systemMessage('Could not compile SASS. ' + _file + ' Check Outputs for more information.', 'error');
+                esac.satusBar.error();
 
-                // helper.outputMessage('Sass Error', ['Sass syntax error at line ' + error.line + ', column ' + error.column, error.file], true);
-
-                return {
-                    err: true,
-                    sassErr: true
-                };
+                esac.message.outputMessage('Sass error', ['Sass syntax error at line ' + error.line + ', column ' + error.column, error.file], true);
+                resolve(false);
             }
         });
     }
