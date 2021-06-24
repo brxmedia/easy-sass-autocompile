@@ -78,8 +78,6 @@ export class compileHelper {
 
                     esac.file.targetPaths(document.fileName, subFolder, outputFile).then((targetPaths) => {
 
-                        console.log(targetPaths);
-
                         this.compile(targetPaths, sourceMap, minify);
 
                     });
