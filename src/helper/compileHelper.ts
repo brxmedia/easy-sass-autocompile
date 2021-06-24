@@ -74,8 +74,9 @@ export class compileHelper {
                     let sourceMap = config.get('sourceMap') as boolean;
                     let minify = config.get('minify') as boolean;
                     let subFolder = config.get('subFolder') as string;
+                    let outputFile = "";
 
-                    esac.file.targetPaths(document.fileName, subFolder, "").then((targetPaths) => {
+                    esac.file.targetPaths(document.fileName, subFolder, outputFile).then((targetPaths) => {
 
                         console.log(targetPaths);
 
