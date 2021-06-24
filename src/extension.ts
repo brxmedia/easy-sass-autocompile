@@ -1,20 +1,17 @@
 import * as vscode from 'vscode';
-import { esac } from './helper/helper'
-import { helper } from './helper';
-import { fileHelper } from './fileHelper';
-import { compileHelper } from './compileHelper';
+import { esac } from './helper/helper';
 import { Position, Range, TextEditor, TextEditorEdit } from 'vscode';
 
 
 // this method is called when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "easy-sass-autocompile" is now active!');
-	helper.statusBarUi.init();
+	esac.satusBar.init();
 
 	// The command has been defined in the package.json file
 	let disposable = vscode.commands.registerCommand('easy-sass-autocompile.info', () => {
-		if (compileHelper.instance != null)
-			helper.systemMessage("" + compileHelper.instance.info.sassInfo + " - Sass Binary Path: " + compileHelper.instance.info.sassBin, 'information', { modal: false });
+		if (esac.compile != null)
+			esac.message.systemMessage("" + esac.compile.info.sassInfo + " - Sass Binary Path: " + esac.compile.info.sassBin, 'information', { modal: false });
 	});
 
 	// The command has been defined in the package.json file
