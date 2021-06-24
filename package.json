@@ -37,6 +37,10 @@
 			{
 				"command": "easy-sass-autocompile.info",
 				"title": "Easy Sass Autocompile - Sass Info"
+			},
+			{
+				"command": "easy-sass-autocompile.setDirty",
+				"title": "Easy Sass Autocompile - Set Dirty"
 			}
 		],
 		"configuration": {
