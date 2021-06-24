@@ -6,7 +6,7 @@ export class statusBarUi {
 
     private static get statusBarItem() {
         if (!statusBarUi._statusBarItem) {
-            statusBarUi._statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 500);
+            statusBarUi._statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -100);
             this.statusBarItem.show();
         }
 
@@ -21,14 +21,14 @@ export class statusBarUi {
     }
 
     static info() {
-        statusBarUi.statusBarItem.text = `$(telescope) Sass Autocompile`;
+        statusBarUi.statusBarItem.text = `$(library) Sass Autocompile`;
         statusBarUi.statusBarItem.color = 'inherit';
         statusBarUi.statusBarItem.command = 'easy-sass-autocompile.info';
         statusBarUi.statusBarItem.tooltip = "Click for more information.";
     }
 
     static building(workingMsg: string = "Building...") {
-        statusBarUi.statusBarItem.text = `$(pulse) ${workingMsg}`;
+        statusBarUi.statusBarItem.text = `$(loading~spin) ${workingMsg}`;
         statusBarUi.statusBarItem.tooltip = 'In case if it takes long time, Show output window and report.';
         statusBarUi.statusBarItem.color = '#a78800';
         statusBarUi.statusBarItem.command = undefined;
