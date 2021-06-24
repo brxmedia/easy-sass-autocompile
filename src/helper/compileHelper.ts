@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { esac } from './helper';
-import { ITargetPaths } from '../fileHelper';
+import { ITargetPaths } from './fileHelper';
 
 export class compileHelper {
     private sassBin: string = "";
@@ -48,6 +48,7 @@ export class compileHelper {
 
     async onSave(document: vscode.TextDocument) {
         if (esac.file.isSassOrScss(document)) {
+            esac.satusBar.building();
             esac.file.inlineCommands(document).then((inlineCommands) => {
 
                 // TODO: a function to check for @import sass functions,
