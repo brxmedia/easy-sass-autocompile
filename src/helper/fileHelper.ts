@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { Position, Range, TextEditor, TextEditorEdit } from 'vscode';
 
-var lineReader = require('line-reader');
+const lineReader = require('line-reader');
 
 export interface IInlineCommands {
     main: string | boolean,

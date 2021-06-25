@@ -11,12 +11,12 @@
 	"engines": {
 		"vscode": "^1.57.0"
 	},
-    "keywords": [
-        "SASS",
-        "SCSS",
-        "Compiler",
-        "Transpiler",
-        "SASS Compiler",
+	"keywords": [
+		"SASS",
+		"SCSS",
+		"Compiler",
+		"Transpiler",
+		"SASS Compiler",
 		"SCSS Compiler",
 		"Autocompile",
 		"SASS Autocompile",
@@ -24,7 +24,7 @@
 		"Autocompiler",
 		"SASS Autocompiler",
 		"SCSS Autocompiler"
-    ],
+	],
 	"categories": [
 		"Other"
 	],
@@ -49,7 +49,7 @@
 				"easySassAutocompile.sassBinLocation": {
 					"type": "string",
 					"default": "",
-					"markdownDescription": "Insert the location of your Sass binary. The default location the extension will check  `/usr/local/lib/node_modules/sass/sass.dart.js`. This is the default path of dart sass mac installation."
+					"markdownDescription": "Insert the location of your Sass binary. The default location the extension will check  `/usr/local/lib/node_modules/dart-sass/sass.dart.js`. This is the default path of dart sass mac installation."
 				},
 				"easySassAutocompile.sourceMap": {
 					"type": "boolean",
@@ -69,6 +69,11 @@
 			}
 		}
 	},
+	"browserslist": [
+		"defaults",
+		"not IE 11",
+		"maintained node versions"
+	],
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
@@ -80,12 +85,14 @@
 	"dependencies": {
 		"line-reader": "^0.4.0",
 		"readline": "^1.3.0",
-		"replace-ext": "latest"
+		"replace-ext": "latest",
+		"autoprefixer": "^10.2.6",
+		"postcss": "^8.1.0"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.2.2",
-		"@types/node": "14.x",
+		"@types/node": "^14.17.4",
 		"@types/vscode": "^1.57.0",
 		"@typescript-eslint/eslint-plugin": "^4.28.0",
 		"@typescript-eslint/parser": "^4.28.0",

@@ -3,6 +3,9 @@ import * as fs from 'fs';
 import { esac } from './helper';
 import { ITargetPaths } from './fileHelper';
 
+const autoprefixer = require('autoprefixer');
+const postcss = require('postcss');
+
 export class compileHelper {
     private sassBin: string = "";
     private SassCompiler: any = null;
@@ -11,7 +14,7 @@ export class compileHelper {
         let config = vscode.workspace.getConfiguration('easySassAutocompile');
         let sassBinLocation = config.get('sassBinLocation') as string;
 
-        let sassBin = '/usr/local/lib/node_modules/sass/sass.dart.js';
+        let sassBin = '/usr/local/lib/node_modules/dart-sass/sass.dart.js';
         // let sassBin = 'C:\\Users\\PBorn\\AppData\\Roaming\\npm\\node_modules\\sass\\sass.dart.js';
 
         if (sassBinLocation != undefined && sassBinLocation.length > 1) {
@@ -92,18 +95,18 @@ export class compileHelper {
         let outputPath = esac.file.join(targetPaths.path, targetPaths.css);
 
         this.compileCss(targetPath, sourceMap, outputPath).then((result) => {
-            if(result){
-                if(minify){
+            if (result) {
+                if (minify) {
                     outputPath = esac.file.join(targetPaths.path, targetPaths.min);
 
                     this.compileCss(targetPath, sourceMap, outputPath, 'compressed').then((result) => {
-                        if(result){
+                        if (result) {
                             esac.message.outputMessage('Successfully compiled', []);
                             esac.satusBar.success();
                         }
                     });
                 }
-                else{
+                else {
                     esac.message.outputMessage('Successfully compiled', []);
                     esac.satusBar.success();
                 }
@@ -121,34 +124,21 @@ export class compileHelper {
                     outputStyle: _outputStyle
                 });
 
-                esac.file.writeFile(_outFile, sassResult.css).then((result) => {
-                    let prompt = (result: NodeJS.ErrnoException) => {
+                // let autoprefix = true;
 
-                        esac.message.systemMessage('Could not save file. ' + _file + ' Check Outputs for more information.', 'error');
-                        esac.satusBar.error();
-
-                        esac.message.outputMessage('File writing error', [result.toString()], true);
-                        resolve(false);
-                    };
-
-                    if (typeof result == 'string') {
-                        esac.message.cacheMessage('Successfully compiled: ' + _outFile);
-                        if (_sourceMap) {
-                            esac.file.writeFile(_outFile + '.map', sassResult.map).then((result) => {
-                                if (typeof result == 'string') {
-                                    esac.message.cacheMessage('Successfully compiled: ' + _outFile + '.map');
-                                    resolve(true);
-                                }
-                                else {
-                                    prompt(result);
-                                }
-                            });
-                        }
-                    }
-                    else {
-                        prompt(result);
-                    }
-                });
+                // if (autoprefix) {
+                //     postcss([autoprefixer]).process(sassResult.css, { from: _file, to: _outFile }).then((result: any) => {
+                //         result.warnings().forEach((warn: any) => {
+                //             console.warn(warn.toString())
+                //         })
+                //         this.prepairCSS(_file, _sourceMap, _outFile, result.css, result.map._mappings).then((result) => { resolve(result); });
+                //         console.log(result)
+                //     });
+                // }
+                // else {
+                //     this.prepairCSS(_file, _sourceMap, _outFile, sassResult.css, sassResult.map).then((result) => { resolve(result); });
+                // }
+                this.prepairCSS(_file, _sourceMap, _outFile, sassResult.css, sassResult.map).then((result) => { resolve(result); });
             } catch (error) {
                 esac.message.systemMessage('Could not compile SASS. ' + _file + ' Check Outputs for more information.', 'error');
                 esac.satusBar.error();
@@ -156,6 +146,39 @@ export class compileHelper {
                 esac.message.outputMessage('Sass error', ['Sass syntax error at line ' + error.line + ', column ' + error.column, error.file], true);
                 resolve(false);
             }
+        });
+    }
+
+    prepairCSS(_file: string, _sourceMap: boolean, _outFile: string, _css: any, _map: any) {
+        return new Promise<boolean>((resolve) => {
+            esac.file.writeFile(_outFile, _css).then((result) => {
+                let prompt = (result: NodeJS.ErrnoException) => {
+
+                    esac.message.systemMessage('Could not save file. ' + _file + ' Check Outputs for more information.', 'error');
+                    esac.satusBar.error();
+
+                    esac.message.outputMessage('File writing error', [result.toString()], true);
+                    resolve(false);
+                };
+
+                if (typeof result == 'string') {
+                    esac.message.cacheMessage('Successfully compiled: ' + _outFile);
+                    if (_sourceMap) {
+                        esac.file.writeFile(_outFile + '.map', _map).then((result) => {
+                            if (typeof result == 'string') {
+                                esac.message.cacheMessage('Successfully compiled: ' + _outFile + '.map');
+                                resolve(true);
+                            }
+                            else {
+                                prompt(result);
+                            }
+                        });
+                    }
+                }
+                else {
+                    prompt(result);
+                }
+            });
         });
     }
 }
