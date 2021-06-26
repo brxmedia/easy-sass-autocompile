@@ -15,7 +15,6 @@ export class compileHelper {
         let sassBinLocation = config.get('sassBinLocation') as string;
 
         let sassBin = '/usr/local/lib/node_modules/dart-sass/sass.dart.js';
-        // let sassBin = 'C:\\Users\\PBorn\\AppData\\Roaming\\npm\\node_modules\\sass\\sass.dart.js';
 
         if (sassBinLocation != undefined && sassBinLocation.length > 1) {
             sassBin = sassBinLocation;
