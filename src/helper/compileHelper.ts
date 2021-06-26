@@ -28,8 +28,8 @@ export class compileHelper {
             return instance;
         }
 
-        // helper.systemMessage('Path to Sass Binary does not exist. ' + sassBin + '', 'error');
-        // helper.statusBarUi.error();
+        esac.message.systemMessage('Path to Sass Binary does not exist. ' + sassBin + '', 'error');
+        esac.satusBar.error();
         return null;
     }
 
