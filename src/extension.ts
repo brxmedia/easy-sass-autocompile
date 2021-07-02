@@ -10,8 +10,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// The command has been defined in the package.json file
 	let disposable = vscode.commands.registerCommand('easy-sass-autocompile.info', () => {
-		if (esac.compile != null)
-			esac.message.systemMessage("" + esac.compile.info.sassInfo + " - Sass Binary Path: " + esac.compile.info.sassBin, 'information', { modal: false });
+		if (esac.compile != null){
+			let ext = vscode.extensions.getExtension('brxmedia.easy-sass-autocompile');
+			let ext_version = ext?.packageJSON.version;
+			esac.message.systemMessage(" Version: " + ext_version + " - " + esac.compile.info.sassInfo + " - Sass Binary Path: " + esac.compile.info.sassBin, 'information', { modal: false });
+		}
 	});
 
 	// The command has been defined in the package.json file
