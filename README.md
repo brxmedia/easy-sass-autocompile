@@ -86,4 +86,8 @@ npm install -g dart-sass
 
 After you installed the right Sass version for you case, make sure you get the path to your `sass.js` or `sass-dart.js`. *Node: these names can change depenting on your installation. The extention can only use the Javascript installations of Sass.*
 
+## ToDo
+
+The next thing will be a built in autoprefixer such as postCSS autoprefixer. The Dependency is already set, but not fully implemented yet :)
+
 **Enjoy!**
