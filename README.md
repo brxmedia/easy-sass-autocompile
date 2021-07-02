@@ -72,24 +72,16 @@ You can install Sass on Windows, Mac, or Linux by downloading the package for yo
 
 If you use Node.js, you can also install Sass using npm by running
 
+**Node Sass**
+
 ```
 npm install -g sass
 ```
 
-**However, please note** that this will install the pure JavaScript implementation of Sass, which runs somewhat slower than the other options listed here. But it has the same interface, so it’ll be easy to swap in another implementation later if you need a bit more speed!
-
-### Install on Windows (Chocolatey)
-If you use the Chocolatey package manager for Windows, you can install Dart Sass by running
+**Dart Sass**
 
 ```
-choco install sass
-```
-
-### Install on Mac OS X or Linux (Homebrew)
-If you use the Homebrew package manager for Mac OS X or Linux, you can install Dart Sass by running
-
-```
-brew install sass/sass/sass
+npm install -g dart-sass
 ```
 
 After you installed the right Sass version for you case, make sure you get the path to your `sass.js` or `sass-dart.js`. *Node: these names can change depenting on your installation. The extention can only use the Javascript installations of Sass.*
