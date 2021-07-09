@@ -52,7 +52,6 @@ export class compileHelper {
         if (esac.file.isSassOrScss(document)) {
             esac.satusBar.building();
             esac.file.inlineCommands(document).then((inlineCommands) => {
-
                 // TODO: a function to check for @import sass functions,
                 // find the files that will be imported and check if they dirty, 
                 // if so pop up message to save them.
@@ -64,24 +63,39 @@ export class compileHelper {
                     esac.file.saveFile(mainFileUri, document);
                 }
                 else {
-                    if (typeof inlineCommands.outputStyle == 'string') {
-
-                    }
-
-                    if (typeof inlineCommands.outputFile == 'string') {
-
-                    }
-
                     let config = vscode.workspace.getConfiguration('easySassAutocompile');
 
                     let sourceMap = config.get('sourceMap') as boolean;
                     let minify = config.get('minify') as boolean;
-                    let subFolder = config.get('subFolder') as string;
+
+                    let outputStyle = config.get('outputStyle') as string;
+                    if (typeof inlineCommands.outputStyle == 'string') {
+                        outputStyle = inlineCommands.outputStyle;
+                    }
+
                     let outputFile = "";
+                    if (typeof inlineCommands.outputFile == 'string') {
+                        outputFile = inlineCommands.outputFile;
+                    }
+
+                    let subFolder = config.get('subFolder') as string;
+                    if (typeof inlineCommands.subFolder == 'string') {
+                        subFolder = inlineCommands.subFolder;
+                    }
+                    if (subFolder != "") {
+                        let seperator = esac.file.getSeperator(document.fileName);
+                        let filePath = esac.file.join(document.fileName.substring(0, document.fileName.lastIndexOf(seperator)), subFolder);
+
+                        let test = esac.file.makeDirIfNotAvailable(filePath);
+                        if (!fs.existsSync(filePath)) {
+                            esac.message.systemMessage('Could not create Folder. ' + filePath + '', 'error');
+                            subFolder = "";
+                        }
+                    }
 
                     esac.file.targetPaths(document.fileName, subFolder, outputFile).then((targetPaths) => {
 
-                        this.compile(targetPaths, sourceMap, minify);
+                        this.compile(targetPaths, sourceMap, minify, outputStyle);
 
                     });
                 }
@@ -89,11 +103,11 @@ export class compileHelper {
         }
     }
 
-    async compile(targetPaths: ITargetPaths, sourceMap: boolean, minify: boolean) {
+    async compile(targetPaths: ITargetPaths, sourceMap: boolean, minify: boolean, outputStyle: string = 'expanded') {
         let targetPath = esac.file.join(targetPaths.targetPath, targetPaths.target);
         let outputPath = esac.file.join(targetPaths.path, targetPaths.css);
 
-        this.compileCss(targetPath, sourceMap, outputPath).then((result) => {
+        this.compileCss(targetPath, sourceMap, outputPath, outputStyle).then((result) => {
             if (result) {
                 if (minify) {
                     outputPath = esac.file.join(targetPaths.path, targetPaths.min);
