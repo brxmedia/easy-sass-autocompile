@@ -7,7 +7,7 @@
 		"url": "https://github.com/brxmedia/easy-sass-autocompile"
 	},
 	"icon": "icon.png",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"engines": {
 		"vscode": "^1.57.0"
 	},
@@ -56,6 +56,19 @@
 					"default": true,
 					"markdownDescription": "Automatically generate CSS source map link in `.css` and `.css.map` file."
 				},
+				"easySassAutocompile.outputStyle": {
+					"type": "string",
+					"default": "expanded",
+					"enum": [
+						"expanded",
+						"compressed"
+					],
+					"enumDescriptions": [
+						"(the default) writes each selector and declaration on its own line,",
+						"removes as many extra characters as possible, and writes the entire stylesheet on a single line."
+					],
+					"markdownDescription": "Choose your desired css output Style, Dart Sass only supports these 2 options.\n\n Option awailable as inline option `// style: expanded`."
+				},
 				"easySassAutocompile.minify": {
 					"type": "boolean",
 					"default": true,
@@ -64,7 +77,7 @@
 				"easySassAutocompile.subFolder": {
 					"type": "string",
 					"default": "",
-					"markdownDescription": "If you want to store your generated css files in a subfolder like `/dist`, it is also possible to use a relative filepath to maybe go to a higher folder level such as `../dist` or just go to the parent folder `../`."
+					"markdownDescription": "If you want to store your generated css files in a subfolder like `/dist`, it is also possible to use a relative filepath to maybe go to a higher folder level such as `../dist` or just go to the parent folder `../`.\n\n Option awailable as inline option `// path: ./dist/css`."
 				}
 			}
 		}
