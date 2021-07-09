@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
 import { esac } from './helper/helper';
-import { Position, Range, TextEditor, TextEditorEdit } from 'vscode';
-
 
 // this method is called when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
@@ -24,25 +22,12 @@ export function activate(context: vscode.ExtensionContext) {
 	let didSaveEvent = vscode.workspace.onDidSaveTextDocument((document) => {
 		if (esac.compile != null)
 			esac.compile.onSave(document);
-
-		// let configuration = vscode.workspace.getConfiguration('easy-sass-autocompile');
-
-		// let activeEditor = vscode.window.activeTextEditor;
-		// if (activeEditor) {
-		// 	let document = activeEditor.document;
-		// 	if (document) {
-		// 		if (compileHelper.instance != null) {
-		// 			// check if the document is of typ sass or scss
-		// 			if (fileHelper.instance.isSassOrScss(document)) {
-		// 				compileHelper.instance.onSave(document);
-		// 			}
-		// 		}
-		// 	}
-		// }
 	});
 
+	// Subscript to context events
 	context.subscriptions.push(
 		disposable,
+		disposableDirty,
 		didSaveEvent
 	);
 }
