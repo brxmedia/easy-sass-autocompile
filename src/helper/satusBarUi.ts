@@ -30,14 +30,14 @@ export class statusBarUi {
     static building(workingMsg: string = "Building...") {
         statusBarUi.statusBarItem.text = `$(loading~spin) ${workingMsg}`;
         statusBarUi.statusBarItem.tooltip = 'In case if it takes long time, Show output window and report.';
-        statusBarUi.statusBarItem.color = '#a78800';
+        statusBarUi.statusBarItem.color = '#E5F20D';
         statusBarUi.statusBarItem.command = undefined;
     }
 
     // Quick status bar messages after compile success or error
     static success() {
         statusBarUi.statusBarItem.text = `$(check) Sass Autocompile: Success`;
-        statusBarUi.statusBarItem.color = '#57c200';
+        statusBarUi.statusBarItem.color = '#94F20D';
         statusBarUi.statusBarItem.command = undefined;
 
         setTimeout(function () {
@@ -47,7 +47,7 @@ export class statusBarUi {
     }
     static error() {
         statusBarUi.statusBarItem.text = `$(x) Sass Autocompile: Error`;
-        statusBarUi.statusBarItem.color = '#c22700';
+        statusBarUi.statusBarItem.color = '#F25E0D';
         statusBarUi.statusBarItem.command = undefined;
 
         setTimeout(function () {
