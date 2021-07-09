@@ -8,7 +8,8 @@ const lineReader = require('line-reader');
 export interface IInlineCommands {
     main: string | boolean,
     outputStyle: string | boolean,
-    outputFile: string | boolean
+    outputFile: string | boolean,
+    subFolder: string | boolean
 }
 export interface ITargetPaths {
     targetPath: string,
@@ -34,49 +35,69 @@ export class fileHelper {
 
     inlineCommands(document: vscode.TextDocument) {
         return new Promise<IInlineCommands>((resolve) => {
+            let lineCount = 0;
             lineReader.eachLine(document.fileName, function (line: string) {
+                lineCount++;
+                if (lineCount < 2) {
+                    let main: string | boolean = false;
+                    let outputStyle: string | boolean = false;
+                    let outputFile: string | boolean = false;
+                    let subFolder: string | boolean = false;
 
-                let main: string | boolean = false;
-                let outputStyle: string | boolean = false;
-                let outputFile: string | boolean = false;
+                    // if no comment in first line!
+                    if (line.indexOf('//') != 0) {
+                        resolve({
+                            main: false,
+                            outputStyle: false,
+                            outputFile: false,
+                            subFolder: false
+                        });
+                    }
+                    else {
 
-                // if no comment in first line!
-                if (line.indexOf('//') != 0) {
-                    resolve({
-                        main: false,
-                        outputStyle: false,
-                        outputFile: false
-                    });
-                }
-
-                // checking for "main" is found
-                if (line.indexOf('main') > -1) {
-                    let data = (/\/\/\s*main\:\s*([\.\/\w]+)/g).exec(line);
-                    if (data != null && data.length > 1) {
-                        let seperator = '/';
-                        if (document.fileName.includes('\\')) {
-                            seperator = '\\';
+                        // checking for "main" is found
+                        if (line.indexOf('main') > -1) {
+                            let data = (/main\:\s*([\.\/\w]+)/g).exec(line);
+                            if (data != null && data.length > 1) {
+                                let seperator = fileHelper.instance.getSeperator(document.fileName);
+                                let filePath = path.join(document.fileName.substring(0, document.fileName.lastIndexOf(seperator)), data[1]);
+                                if (fs.existsSync(filePath)) {
+                                    main = filePath;
+                                }
+                            }
                         }
-                        let filePath = path.join(document.fileName.substring(0, document.fileName.lastIndexOf(seperator)), data[1]);
-                        if (fs.existsSync(filePath)) {
-                            main = filePath;
+                        else {
+                            // checking for "style" is found
+                            if (line.indexOf('style') > -1) {
+                                let data = (/style\:\s*([\.\/\w]+)/g).exec(line);
+                                if (data != null && data.length > 1) {
+                                    outputStyle = data[1];
+                                }
+                            }
+                            // checking for "output" is found
+                            if (line.indexOf('output') > -1) {
+                                let data = (/output\:\s*([\.\/\w]+)/g).exec(line);
+                                if (data != null && data.length > 1) {
+                                    outputFile = data[1];
+                                }
+                            }
+                            // checking for "path" is found
+                            if (line.indexOf('path') > -1) {
+                                let data = (/path\:\s*([\.\/\w]+)/g).exec(line);
+                                if (data != null && data.length > 1) {
+                                    subFolder = data[1];
+                                }
+                            }
                         }
+
+                        resolve({
+                            main: main,
+                            outputStyle: outputStyle,
+                            outputFile: outputFile,
+                            subFolder: subFolder
+                        });
                     }
                 }
-
-                // console.log(line.indexOf('outputStyle'));
-                // // checking for "main" is found
-                // if (line.indexOf('outputStyle') > -1) {
-                //     let data = (/\/\/\s*outputStyle\:\s*([\.\/\w]+)/g).exec(line);
-                //     if (data != null && data.length > 1) {
-                //     }
-                // }
-
-                resolve({
-                    main: main,
-                    outputStyle: outputStyle,
-                    outputFile: outputFile
-                });
             });
         });
     }
@@ -122,7 +143,6 @@ export class fileHelper {
                 oTarget = tOutputFile;
                 oMinTarget = tMinOutputFile;
             }
-
             if (subFolder != undefined && subFolder.length > 0) {
                 oPath = path.join(tPath, subFolder);
             }
@@ -195,7 +215,24 @@ export class fileHelper {
         });
     }
 
+    getSeperator(path: string) {
+        let seperator = '/';
+        if (path.includes('\\')) {
+            seperator = '\\';
+        }
+        return seperator;
+    }
+
     join(path1: string, path2: string) {
         return path.join(path1, path2);
+    }
+
+    makeDirIfNotAvailable(dir: string) {
+        if (fs.existsSync(dir)) return false;
+        if (!fs.existsSync(path.dirname(dir))) {
+            this.makeDirIfNotAvailable(path.dirname(dir));
+        }
+        fs.mkdirSync(dir);
+        return true;
     }
 }
