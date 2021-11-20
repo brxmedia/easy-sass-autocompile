@@ -137,21 +137,21 @@ export class compileHelper {
                     outputStyle: _outputStyle
                 });
 
-                // let autoprefix = true;
+                let autoprefix = true;
 
-                // if (autoprefix) {
-                //     postcss([autoprefixer]).process(sassResult.css, { from: _file, to: _outFile }).then((result: any) => {
-                //         result.warnings().forEach((warn: any) => {
-                //             console.warn(warn.toString())
-                //         })
-                //         this.prepairCSS(_file, _sourceMap, _outFile, result.css, result.map._mappings).then((result) => { resolve(result); });
-                //         console.log(result)
-                //     });
-                // }
-                // else {
-                //     this.prepairCSS(_file, _sourceMap, _outFile, sassResult.css, sassResult.map).then((result) => { resolve(result); });
-                // }
-                this.prepairCSS(_file, _sourceMap, _outFile, sassResult.css, sassResult.map).then((result) => { resolve(result); });
+                if (autoprefix) {
+                    postcss([autoprefixer]).process(sassResult.css, { from: _file, to: _outFile }).then((result: any) => {
+                        result.warnings().forEach((warn: any) => {
+                            console.warn(warn.toString())
+                        })
+                        this.prepairCSS(_file, _sourceMap, _outFile, result.css, sassResult.map).then((result) => { resolve(result); });
+                        console.log(result);
+                    });
+                }
+                else {
+                    this.prepairCSS(_file, _sourceMap, _outFile, sassResult.css, sassResult.map).then((result) => { resolve(result); });
+                }
+                // this.prepairCSS(_file, _sourceMap, _outFile, sassResult.css, sassResult.map).then((result) => { resolve(result); });
             } catch (error) {
                 esac.message.systemMessage('Could not compile SASS. ' + _file + ' Check Outputs for more information.', 'error');
                 esac.satusBar.error();
