@@ -74,6 +74,11 @@
 					"default": true,
 					"markdownDescription": "Automatically minifies the generated CSS in an additional `.min.css` file. Also compatible with source maps. All files will be generated in addition to the `.css` files."
 				},
+				"easySassAutocompile.autoprefixer": {
+					"type": "boolean",
+					"default": true,
+					"markdownDescription": "Automatically processing the output by PostCSS Autoprefixer."
+				},
 				"easySassAutocompile.subFolder": {
 					"type": "string",
 					"default": "",

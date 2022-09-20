@@ -67,6 +67,7 @@ export class compileHelper {
 
                     let sourceMap = config.get('sourceMap') as boolean;
                     let minify = config.get('minify') as boolean;
+                    let autoprefix = config.get('autoprefixer') as boolean;
 
                     let outputStyle = config.get('outputStyle') as string;
                     if (typeof inlineCommands.outputStyle == 'string') {
@@ -95,7 +96,7 @@ export class compileHelper {
 
                     esac.file.targetPaths(document.fileName, subFolder, outputFile).then((targetPaths) => {
 
-                        this.compile(targetPaths, sourceMap, minify, outputStyle);
+                        this.compile(targetPaths, sourceMap, minify, autoprefix, outputStyle);
 
                     });
                 }
@@ -103,16 +104,13 @@ export class compileHelper {
         }
     }
 
-    async compile(targetPaths: ITargetPaths, sourceMap: boolean, minify: boolean, outputStyle: string = 'expanded') {
-        let targetPath = esac.file.join(targetPaths.targetPath, targetPaths.target);
-        let outputPath = esac.file.join(targetPaths.path, targetPaths.css);
+    async compile(targetPaths: ITargetPaths, sourceMap: boolean, minify: boolean, autoprefix: boolean, outputStyle: string = 'expanded') {
 
-        this.compileCss(targetPath, sourceMap, outputPath, outputStyle).then((result) => {
+        this.compileCss(targetPaths.path, targetPaths.target, sourceMap, targetPaths.css, autoprefix, outputStyle).then((result) => {
             if (result) {
                 if (minify) {
-                    outputPath = esac.file.join(targetPaths.path, targetPaths.min);
 
-                    this.compileCss(targetPath, sourceMap, outputPath, 'compressed').then((result) => {
+                    this.compileCss(targetPaths.path, targetPaths.target, sourceMap, targetPaths.min, autoprefix, 'compressed').then((result) => {
                         if (result) {
                             esac.message.outputMessage('Successfully compiled', []);
                             esac.satusBar.success();
@@ -127,42 +125,56 @@ export class compileHelper {
         });
     }
 
-    compileCss(_file: string, _sourceMap: boolean, _outFile: string, _outputStyle: string = "expanded") {
+    compileCss(_filePath: string, _file: string, _sourceMap: boolean, _outFile: string, autoprefix: boolean, _outputStyle: string = "expanded") {
         return new Promise<boolean>((resolve) => {
+            let targetPath = esac.file.join(_filePath, _file);
+            let outputPath = esac.file.join(_filePath, _outFile);
+
             try {
+
                 let sassResult = this.SassCompiler.renderSync({
-                    file: _file,
+                    file: targetPath,
                     sourceMap: _sourceMap,
                     outFile: _outFile,
                     outputStyle: _outputStyle
                 });
 
-                let autoprefix = true;
-
                 if (autoprefix) {
-                    postcss([autoprefixer]).process(sassResult.css, { from: _file, to: _outFile }).then((result: any) => {
+                    let sourceMap;
+
+                    if(_sourceMap){
+                        sourceMap = {
+                            absolute: true,
+                            annotation: _outFile + '.map',
+                            inline: false
+                        }
+                    }
+
+                    postcss([autoprefixer]).process(sassResult.css, {map: sourceMap}).then((result: any) => {
                         result.warnings().forEach((warn: any) => {
                             console.warn(warn.toString())
                         })
-                        this.prepairCSS(_file, _sourceMap, _outFile, result.css, sassResult.map).then((result) => { resolve(result); });
-                        console.log(result);
+                        this.prepareCSS(targetPath, _sourceMap, outputPath, result.css, sassResult.map).then((result) => { resolve(result); });
+                        console.log(result.css);
                     });
                 }
                 else {
-                    this.prepairCSS(_file, _sourceMap, _outFile, sassResult.css, sassResult.map).then((result) => { resolve(result); });
+                    this.prepareCSS(targetPath, _sourceMap, outputPath, sassResult.css, sassResult.map).then((result) => { resolve(result); });
                 }
-                // this.prepairCSS(_file, _sourceMap, _outFile, sassResult.css, sassResult.map).then((result) => { resolve(result); });
+                // this.prepairCSS(targetPath, _sourceMap, outputPath, sassResult.css, sassResult.map).then((result) => { resolve(result); });
             } catch (error) {
-                esac.message.systemMessage('Could not compile SASS. ' + _file + ' Check Outputs for more information.', 'error');
+                esac.message.systemMessage('Could not compile SASS. ' + targetPath + ' Check Outputs for more information.', 'error');
                 esac.satusBar.error();
 
-                esac.message.outputMessage('Sass error', ['Sass syntax error at line ' + error.line + ', column ' + error.column, error.file], true);
+                console.log(error);
+
+                //esac.message.outputMessage('Sass error', ['Sass syntax error at line ' + error.line + ', column ' + error.column, error.file], true);
                 resolve(false);
             }
         });
     }
 
-    prepairCSS(_file: string, _sourceMap: boolean, _outFile: string, _css: any, _map: any) {
+    prepareCSS(_file: string, _sourceMap: boolean, _outFile: string, _css: any, _map: any) {
         return new Promise<boolean>((resolve) => {
             esac.file.writeFile(_outFile, _css).then((result) => {
                 let prompt = (result: NodeJS.ErrnoException) => {
