@@ -4,6 +4,10 @@ All notable changes to the "easy-sass-autocompile" extension will be documented 
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [2.0.0]
+
+#### added
+ - PostCSS Autoprefixer
 ## [1.0.1]
 
 #### added

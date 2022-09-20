@@ -2,9 +2,9 @@
 
 Automatically compile your .sass and .scss fles on save. This extension supports sass and dart-sass and shipped with some inline features.
 
-[![VisualStudioMarketplace](https://img.shields.io/badge/Version-v1.0.1-important.svg)](https://marketplace.visualstudio.com/items?itemName=brxmedia.easy-sass-autocompile)
+[![VisualStudioMarketplace](https://img.shields.io/badge/Version-v2.0.0-important.svg)](https://marketplace.visualstudio.com/items?itemName=brxmedia.easy-sass-autocompile)
 [![Downloads](https://img.shields.io/badge/Downloads-600%2B-success.svg)](https://marketplace.visualstudio.com/items?itemName=brxmedia.easy-sass-autocompile)
-[![UpdateTime](https://img.shields.io/badge/Updated-2021%2F06%2F09%2000%3A15%3A30-informational.svg)](https://marketplace.visualstudio.com/items?itemName=brxmedia.easy-sass-autocompile)
+[![UpdateTime](https://img.shields.io/badge/Updated-2022%2F09%2F20-informational.svg)](https://marketplace.visualstudio.com/items?itemName=brxmedia.easy-sass-autocompile)
 
 ## Features
 
