@@ -2,9 +2,9 @@
 
 Automatically compile your .sass and .scss fles on save. This extension supports sass and dart-sass and shipped with some inline features.
 
-[![VisualStudioMarketplace](https://img.shields.io/badge/Version-v1.0.1-important.svg)](https://marketplace.visualstudio.com/items?itemName=brxmedia.easy-sass-autocompile)
+[![VisualStudioMarketplace](https://img.shields.io/badge/Version-v2.0.0-important.svg)](https://marketplace.visualstudio.com/items?itemName=brxmedia.easy-sass-autocompile)
 [![Downloads](https://img.shields.io/badge/Downloads-600%2B-success.svg)](https://marketplace.visualstudio.com/items?itemName=brxmedia.easy-sass-autocompile)
-[![UpdateTime](https://img.shields.io/badge/Updated-2021%2F06%2F09%2000%3A15%3A30-informational.svg)](https://marketplace.visualstudio.com/items?itemName=brxmedia.easy-sass-autocompile)
+[![UpdateTime](https://img.shields.io/badge/Updated-2022%2F10%2F16-informational.svg)](https://marketplace.visualstudio.com/items?itemName=brxmedia.easy-sass-autocompile)
 
 ## Features
 
@@ -90,8 +90,12 @@ npm install -g dart-sass
 
 After you installed the right Sass version for you case, make sure you get the path to your `sass.js` or `sass-dart.js`. *Node: these names can change depenting on your installation. The extention can only use the Javascript installations of Sass.*
 
+## Autoprefixer
+
+Added postCSS Autoprefixer. Default browserslist is set inside the extension and cannot be eddited right now.
+
 ## ToDo
 
-The next thing will be a built in autoprefixer such as postCSS autoprefixer. The Dependency is already set, but not fully implemented yet :)
+Refactoring and adding more options. Such as browserslist and selection of build in sass versions. In that cause you do not need a local sass installation to work with this extension.
 
 **Enjoy!**
